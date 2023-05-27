@@ -2,14 +2,15 @@ import { ICompany } from "./models/Company";
 
 const mysql = require("mysql2");
 const dotemv = require("dotenv");
+const bcrypt = require("bcryptjs");
 
 interface IUser {
   email: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-  company: string;
-  tel: string;
+  password?: string;
+  first_name?: string;
+  last_name?: string;
+  company?: string;
+  tel?: string;
 }
 
 dotemv.config();
@@ -45,7 +46,7 @@ export async function getUsersInCompany(id: string) {
   return rows;
 }
 
-export async function createUser({
+export async function registrUser({
   email,
   password,
   first_name,
@@ -63,15 +64,41 @@ export async function createUser({
     return "error";
   } else {
     if (companyAPI) {
+      let hashedPassword = await bcrypt.hash(password, 6);
+
       const result = await pool.query(
         `INSERT INTO users (email, password, first_name, last_name, company, tel, company_id) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [email, password, first_name, last_name, company, tel, companyAPI.id]
+        [
+          email,
+          hashedPassword,
+          first_name,
+          last_name,
+          company,
+          tel,
+          companyAPI.id,
+        ]
       );
       return result;
     } else {
       return "Not found Company!";
     }
   }
+}
+
+export async function authUser({ email, password }: IUser) {
+  const [rows] = await pool.query("SELECT * FROM users.users WHERE email = ?", [
+    email,
+  ]);
+  if (rows.length > 0) {
+    const pas = await bcrypt.compare(password, rows[0].password);
+    if (pas) {
+      return rows;
+    }
+  }
+  // if(rows.length > 0) {
+  //   if(rows[0])
+  // }
+  // return rows;
 }
 
 export async function getNotes() {
