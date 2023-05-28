@@ -10,9 +10,11 @@ import { authRouter } from "./routers/auth-router";
 
 const app = express();
 const port = process.env.PORT || 5000;
+const cors = require("cors");
 
 const parserMiddleware = bodyParser({});
 app.use(parserMiddleware);
+app.use(cors());
 
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);

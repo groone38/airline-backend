@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 
 authRouter.post("/registr", async (req: Request, res: Response) => {
   const password = req.body.password;
-  const confirm = req.body.passwordConfirm;
+  const confirm = req.body.confirmPassword;
 
   if (password === confirm) {
     const user = await registrUser(req.body);
@@ -33,12 +33,15 @@ authRouter.post("/registr", async (req: Request, res: Response) => {
 authRouter.post("/login", async (req: Request, res: Response) => {
   const login = await authUser(req.body);
 
-  const token = jwt.sign(login[0].id, process.env.JWT_SECRET);
-
   if (login) {
+    const token = jwt.sign(login[0].id, process.env.JWT_SECRET);
     res.status(200).json({
       message: "Login sucsses",
       token: token,
+    });
+  } else {
+    res.status(404).json({
+      message: "User not found!",
     });
   }
 });
