@@ -32,7 +32,7 @@ authRouter.post("/registr", async (req: Request, res: Response) => {
 
 authRouter.post("/login", async (req: Request, res: Response) => {
   const login = await authUser(req.body);
-
+  console.log(login);
   if (login) {
     const token = jwt.sign(login[0].id, process.env.JWT_SECRET);
     res.status(200).json({

@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
 import { productsRoute } from "./routers/products-router";
@@ -11,6 +11,7 @@ import { authRouter } from "./routers/auth-router";
 const app = express();
 const port = process.env.PORT || 5000;
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
 const parserMiddleware = bodyParser({});
 app.use(parserMiddleware);
