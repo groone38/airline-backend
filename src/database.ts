@@ -89,6 +89,7 @@ export async function authUser({ email, password }: IUser) {
   const [rows] = await pool.query("SELECT * FROM users.users WHERE email = ?", [
     email,
   ]);
+
   if (rows.length > 0) {
     const pas = await bcrypt.compare(password, rows[0].password);
     if (pas) {

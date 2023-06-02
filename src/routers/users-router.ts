@@ -43,7 +43,7 @@ usersRouter.get(
 
 usersRouter.post("/", authenticateJWT, async (req: Request, res: Response) => {
   const user = await registrUser(req.body);
-  console.log(user);
+
   if (user === "error") {
     res.status(403).json({
       message: "This user already exists",
