@@ -32,9 +32,12 @@ authRouter.post("/registr", async (req: Request, res: Response) => {
 
 authRouter.post("/login", async (req: Request, res: Response) => {
   const login = await authUser(req.body);
-  console.log(login[0]);
+
   if (login) {
-    const token = jwt.sign(login[0].id, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: login[0].id, role: login[0].admin },
+      process.env.JWT_SECRET
+    );
     res.status(200).json({
       message: "Login sucsses",
       token: token,
