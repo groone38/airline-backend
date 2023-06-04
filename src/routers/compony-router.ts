@@ -1,5 +1,11 @@
 import { Request, Response, Router } from "express";
-import { getCompany, getCompanyOne, getUsersInCompany } from "../database";
+import {
+  createCompany,
+  getCompany,
+  getCompanyOne,
+  getUsersInCompany,
+} from "../database";
+import { ICompany } from "../models/Company";
 
 export const componyRouter = Router();
 const jwt = require("jsonwebtoken");
@@ -29,3 +35,25 @@ componyRouter.get("/", authenticateJWT, async (req: Request, res: Response) => {
   const company = await getCompany();
   res.status(200).json(company);
 });
+
+componyRouter.post(
+  "/",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    const companyAPI = await getCompany().then((res) => {
+      return res.find(
+        (item: ICompany) => item.name_company === req.body["name_company"]
+      );
+    });
+    if (companyAPI) {
+      res.status(404).json({
+        message: "This company already exists",
+      });
+    } else {
+      await createCompany(req.body["name_company"]);
+      res.status(200).json({
+        message: "Create company success!",
+      });
+    }
+  }
+);

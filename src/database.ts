@@ -34,6 +34,14 @@ export async function getCompany() {
   return rows;
 }
 
+export async function createCompany(company: string) {
+  const result = await pool.query(
+    `INSERT INTO company (name_company) VALUES (?)`,
+    [company]
+  );
+  return result;
+}
+
 export async function getUsers() {
   const [rows] = await pool.query("SELECT * FROM users");
   return rows;
