@@ -39,7 +39,8 @@ export async function createCompany(company: string) {
     `INSERT INTO company (name_company) VALUES (?)`,
     [company]
   );
-  return result;
+
+  return getCompany();
 }
 
 export async function getUsers() {

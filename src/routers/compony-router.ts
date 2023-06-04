@@ -50,8 +50,9 @@ componyRouter.post(
         message: "This company already exists",
       });
     } else {
-      await createCompany(req.body["name_company"]);
+      const result = await createCompany(req.body["name_company"]);
       res.status(200).json({
+        data: result,
         message: "Create company success!",
       });
     }
