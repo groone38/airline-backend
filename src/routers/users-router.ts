@@ -34,25 +34,31 @@ usersRouter.get(
   "/:id",
   authenticateJWT,
   async (req: Request, res: Response) => {
-    const company = await getCompanyOne(req.params.id);
-    const users = await getUsersInCompany(company[0].id);
+    // const company = await getCompanyOne(req.params.id);
+    const users = await getUsersInCompany(req.params.id);
     res.status(200).json(users);
   }
 );
 
-usersRouter.post("/", authenticateJWT, async (req: Request, res: Response) => {
-  const user = await registrUser(req.body);
-  if (user === "error") {
-    res.status(403).json({
-      message: "This user already exists",
-    });
-  } else if (user === "Not found Company!") {
-    res.status(404).json({
-      message: "Not found Company!",
-    });
-  } else {
-    res.status(200).json({
-      message: "Registr complite",
-    });
+usersRouter.post(
+  "/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    const user = await registrUser(req.body);
+    if (user === "error") {
+      res.status(403).json({
+        message: "This user already exists",
+      });
+    } else if (user === "Not found Company!") {
+      res.status(404).json({
+        message: "Not found Company!",
+      });
+    } else {
+      const result = await getUsersInCompany(req.params.id);
+      res.status(200).json({
+        data: result,
+        message: "Registr complite",
+      });
+    }
   }
-});
+);
