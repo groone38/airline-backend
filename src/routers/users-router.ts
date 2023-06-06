@@ -1,7 +1,9 @@
 import { Request, Response, Router } from "express";
 import {
+  deleteUser,
   getCompany,
   getCompanyOne,
+  getUserOne,
   getUsers,
   getUsersInCompany,
   registrUser,
@@ -58,6 +60,25 @@ usersRouter.post(
       res.status(200).json({
         data: result,
         message: "Registr complite",
+      });
+    }
+  }
+);
+
+usersRouter.delete(
+  "/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    const userFind = await getUserOne(req.params.id);
+    if (userFind.length > 0) {
+      await deleteUser(req.params.id).then(() =>
+        res.status(200).json({
+          message: "User delete",
+        })
+      );
+    } else {
+      res.status(404).json({
+        message: "Not found user",
       });
     }
   }

@@ -48,10 +48,20 @@ export async function getUsers() {
   return rows;
 }
 
+export async function getUserOne(id: string) {
+  const [rows] = await pool.query(`SELECT * FROM users WHERE id=${id}`);
+  return rows;
+}
+
 export async function getUsersInCompany(id: string) {
   const [rows] = await pool.query(
     `SELECT * FROM users WHERE company_id = ${id}`
   );
+  return rows;
+}
+
+export async function deleteUser(id: string) {
+  const [rows] = await pool.query(`DELETE FROM users WHERE id=${id}`);
   return rows;
 }
 
