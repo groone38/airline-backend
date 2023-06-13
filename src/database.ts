@@ -5,6 +5,7 @@ const dotemv = require("dotenv");
 const bcrypt = require("bcryptjs");
 
 interface IUser {
+  id?: string;
   email: string;
   password?: string;
   first_name?: string;
@@ -57,6 +58,21 @@ export async function getUsersInCompany(id: string) {
   const [rows] = await pool.query(
     `SELECT * FROM users WHERE company_id = ${id}`
   );
+  return rows;
+}
+
+export async function putUser(
+  id: string,
+  { email, first_name, last_name, company, tel }: IUser
+) {
+  const sql = `UPDATE users SET email = ?, first_name = ?, last_name = ?, company = ?, tel = ? WHERE id = ${id}`;
+  const [rows] = await pool.query(sql, [
+    email,
+    first_name,
+    last_name,
+    company,
+    tel,
+  ]);
   return rows;
 }
 

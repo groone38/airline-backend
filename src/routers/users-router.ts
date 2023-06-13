@@ -6,6 +6,7 @@ import {
   getUserOne,
   getUsers,
   getUsersInCompany,
+  putUser,
   registrUser,
 } from "../database";
 
@@ -60,6 +61,22 @@ usersRouter.post(
       res.status(200).json({
         data: result,
         message: "Registr complite",
+      });
+    }
+  }
+);
+
+usersRouter.put(
+  "/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    console.log(req.params);
+    console.log(req.body);
+    const userFind = await getUserOne(req.params.id);
+    if (userFind.length > 0) {
+      await putUser(req.params.id, req.body);
+      res.status(200).json({
+        message: "Update user success!",
       });
     }
   }
