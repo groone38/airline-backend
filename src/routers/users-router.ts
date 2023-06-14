@@ -1,10 +1,7 @@
 import { Request, Response, Router } from "express";
 import {
   deleteUser,
-  getCompany,
-  getCompanyOne,
   getUserOne,
-  getUsers,
   getUsersInCompany,
   putUser,
   registrUser,
@@ -70,8 +67,6 @@ usersRouter.put(
   "/:id",
   authenticateJWT,
   async (req: Request, res: Response) => {
-    console.log(req.params);
-    console.log(req.body);
     const userFind = await getUserOne(req.params.id);
     if (userFind.length > 0) {
       await putUser(req.params.id, req.body);

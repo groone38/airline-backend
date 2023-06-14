@@ -65,13 +65,17 @@ export async function putUser(
   id: string,
   { email, first_name, last_name, company, tel }: IUser
 ) {
-  const sql = `UPDATE users SET email = ?, first_name = ?, last_name = ?, company = ?, tel = ? WHERE id = ${id}`;
+  const compnay_id = await getCompany().then((res: ICompany[]) =>
+    res.find((item) => item.name_company === company)
+  );
+  const sql = `UPDATE users SET email = ?, first_name = ?, last_name = ?, company = ?, tel = ?, company_id = ? WHERE id = ${id}`;
   const [rows] = await pool.query(sql, [
     email,
     first_name,
     last_name,
     company,
     tel,
+    compnay_id?.id,
   ]);
   return rows;
 }
