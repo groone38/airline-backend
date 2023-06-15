@@ -44,6 +44,11 @@ export async function createCompany(company: string) {
   return getCompany();
 }
 
+export async function deleteCompany(id: string) {
+  const [rows] = await pool.query(`DELETE FROM company WHERE id=${id}`);
+  return rows;
+}
+
 export async function getUsers() {
   const [rows] = await pool.query("SELECT * FROM users");
   return rows;
@@ -135,10 +140,6 @@ export async function authUser({ email, password }: IUser) {
       return rows;
     }
   }
-  // if(rows.length > 0) {
-  //   if(rows[0])
-  // }
-  // return rows;
 }
 
 export async function getNotes() {

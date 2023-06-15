@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import {
   createCompany,
+  deleteCompany,
   getCompany,
   getCompanyOne,
   getUsersInCompany,
@@ -23,7 +24,6 @@ export const authenticateJWT = (req: any, res: Response, next: any) => {
       }
 
       req.user = user;
-      // console.log(req.user);
       next();
     });
   } else {
@@ -54,6 +54,25 @@ componyRouter.post(
       res.status(200).json({
         data: result,
         message: "Create company success!",
+      });
+    }
+  }
+);
+
+componyRouter.delete(
+  "/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    const company = await getCompanyOne(req.params.id);
+    if (company.length > 0) {
+      await deleteCompany(req.params.id).then(() => {
+        res.status(200).json({
+          message: "Company delete!",
+        });
+      });
+    } else {
+      res.status(404).json({
+        message: "Company not Found!",
       });
     }
   }
