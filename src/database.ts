@@ -44,6 +44,13 @@ export async function createCompany(company: string) {
   return getCompany();
 }
 
+export async function putCompany(name_company: string, id: string) {
+  console.log(name_company);
+  const sql = `UPDATE company SET name_company = ? WHERE id = ${id}`;
+  const [rows] = await pool.query(sql, [name_company]);
+  return rows;
+}
+
 export async function deleteCompany(id: string) {
   const [rows] = await pool.query(`DELETE FROM company WHERE id=${id}`);
   return rows;

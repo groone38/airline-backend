@@ -5,6 +5,7 @@ import {
   getCompany,
   getCompanyOne,
   getUsersInCompany,
+  putCompany,
 } from "../database";
 import { ICompany } from "../models/Company";
 
@@ -56,6 +57,19 @@ componyRouter.post(
         message: "Create company success!",
       });
     }
+  }
+);
+
+componyRouter.put(
+  "/:id",
+  authenticateJWT,
+  async (req: Request, res: Response) => {
+    console.log(req.body);
+    await putCompany(req.body["name__company"], req.params.id).then(() => {
+      res.status(200).json({
+        message: "Update success!",
+      });
+    });
   }
 );
 
